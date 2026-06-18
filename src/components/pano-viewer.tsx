@@ -46,16 +46,17 @@ function PanoViewerImpl({
       id: p.id,
       panorama: p.url,
       thumbnail: p.thumbnail,
-      name: p.title,
+      // name dikosongkan agar tidak ada caption di thumbnail
+      name: '',
       options: {
-        caption: p.title,
+        // caption viewer juga dikosongkan
+        caption: '',
       },
     }))
 
     const config: ViewerConfig = {
       container: containerRef.current,
       panorama: startPhoto.url,
-      caption: startPhoto.title,
       loadingTxt: 'Memuat panorama 360°…',
       defaultZoomLvl: 0,
       minFov: 40,
@@ -68,10 +69,10 @@ function PanoViewerImpl({
       moveInertia: true,
       mousemove: true,
       mousewheel: true,
+      // Navbar tanpa 'caption' karena tidak ada judul yang ditampilkan
       navbar: [
         'zoom',
         'move',
-        'caption',
         'download',
         'fullscreen',
         'autorotate',

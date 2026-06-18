@@ -44,27 +44,22 @@ export default function Home() {
 
   return (
     <main className="relative flex min-h-[100svh] w-full flex-col bg-black">
-      {/* Header overlay — tanggal + judul foto aktif */}
+      {/* Header overlay — hanya nama + tanggal + counter */}
       <header className="pointer-events-none absolute inset-x-0 top-0 z-10 bg-gradient-to-b from-black/70 to-transparent px-4 py-4 sm:px-6 sm:py-5">
         <div className="flex flex-col gap-1">
-          <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-white/60">
+          <h1 className="text-lg font-semibold text-white sm:text-xl">
             Progres Rumah Yayu
-          </p>
+          </h1>
           {activePhoto && (
-            <>
-              <h1 className="text-lg font-semibold text-white sm:text-xl">
-                {activePhoto.title}
-              </h1>
-              <p className="text-sm text-white/70">
-                {format(parseISO(activePhoto.date), 'EEEE, d MMMM yyyy', {
-                  locale: idLocale,
-                })}
-                <span className="mx-2 text-white/30">·</span>
-                <span className="tabular-nums">
-                  {activeIndex + 1} / {PHOTOS.length}
-                </span>
-              </p>
-            </>
+            <p className="text-sm text-white/70">
+              {format(parseISO(activePhoto.date), 'EEEE, d MMMM yyyy', {
+                locale: idLocale,
+              })}
+              <span className="mx-2 text-white/30">·</span>
+              <span className="tabular-nums">
+                {activeIndex + 1} / {PHOTOS.length}
+              </span>
+            </p>
           )}
         </div>
       </header>

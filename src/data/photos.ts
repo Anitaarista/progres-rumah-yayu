@@ -6,7 +6,6 @@
  * 2. Tambah objek baru di array PHOTOS di bawah, dengan:
  *    - id       : unik (bebas string)
  *    - date     : tanggal ambil foto (format YYYY-MM-DD)
- *    - title    : judul singkat (muncul di header + gallery)
  *    - url      : URL ImageKit dengan transformasi optimasi (w-4096, q-80, f-auto)
  *    - thumbnail: URL ImageKit versi kecil untuk thumbnail gallery (w-400, q-70)
  *
@@ -16,7 +15,6 @@
 export interface PanoPhoto {
   id: string
   date: string // YYYY-MM-DD
-  title: string
   url: string
   thumbnail: string
 }
@@ -32,7 +30,6 @@ export const PHOTOS: PanoPhoto[] = [
   {
     id: 'day-1',
     date: '2026-06-18',
-    title: 'Dokumentasi Awal — Lahan Belum Dikerjakan',
     url: ik(PHOTO_FILE, 'w-4096,q-80,f-auto'),
     thumbnail: ik(PHOTO_FILE, 'w-400,h-200,fo-auto,q-70,f-auto'),
   },
@@ -42,14 +39,12 @@ export const PHOTOS: PanoPhoto[] = [
   // {
   //   id: 'day-2',
   //   date: '2026-11-11',
-  //   title: 'Pondasi & Galian',
   //   url: ik('NAMA_FILE_BARU.jpg', 'w-4096,q-80,f-auto'),
   //   thumbnail: ik('NAMA_FILE_BARU.jpg', 'w-400,h-200,fo-auto,q-70,f-auto'),
   // },
   // {
   //   id: 'day-3',
   //   date: '2026-11-12',
-  //   title: 'Pengecoran Pondasi',
   //   url: ik('NAMA_FILE_LAIN.jpg', 'w-4096,q-80,f-auto'),
   //   thumbnail: ik('NAMA_FILE_LAIN.jpg', 'w-400,h-200,fo-auto,q-70,f-auto'),
   // },
