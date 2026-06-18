@@ -54,6 +54,13 @@ server.log
 upload/
 public/uploads/progress/pano-*.jpg
 
+# download folder
+download/
+
+# examples & mini-services from scaffold
+examples/
+mini-services/
+
 # agent browser
 deploy-verify.png
 
