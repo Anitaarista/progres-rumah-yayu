@@ -3,23 +3,22 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 
 import { useEffect, useRef, useState } from 'react'
-import { Viewer, type ViewerOptions } from 'photo-sphere-viewer'
-import 'photo-sphere-viewer/dist/photo-sphere-viewer.css'
+import { Viewer, type ViewerConfig } from '@photo-sphere-viewer/core'
+import { GalleryPlugin, type GalleryItem } from '@photo-sphere-viewer/gallery-plugin'
+import '@photo-sphere-viewer/core/index.css'
+import '@photo-sphere-viewer/gallery-plugin/index.css'
+import type { PanoPhoto } from '@/data/photos'
 
 interface PanoViewerProps {
-  imageUrl: string
-  title?: string
-  caption?: string
-  description?: string
-  autoRotate?: boolean
+  photos: PanoPhoto[]
+  defaultIndex?: number
+  onIndexChange?: (index: number) => void
 }
 
 function PanoViewerImpl({
-  imageUrl,
-  title,
-  caption,
-  description,
-  autoRotate = true,
+  photos,
+  defaultIndex = 0,
+  onIndexChange,
 }: PanoViewerProps) {
   const containerRef = useRef<HTMLDivElement | null>(null)
   const viewerRef = useRef<Viewer | null>(null)
@@ -27,8 +26,10 @@ function PanoViewerImpl({
 
   useEffect(() => {
     if (!containerRef.current) return
+    if (photos.length === 0) return
     let cancelled = false
 
+    // Cleanup instance sebelumnya
     if (viewerRef.current) {
       try {
         viewerRef.current.destroy()
@@ -38,25 +39,28 @@ function PanoViewerImpl({
       viewerRef.current = null
     }
 
-    const navBtns = [
-      'zoom',
-      'move',
-      'caption',
-      'download',
-      'fullscreen',
-      'autorotate',
-    ]
+    const startIndex = Math.max(0, Math.min(defaultIndex, photos.length - 1))
+    const startPhoto = photos[startIndex]
 
-    const config: ViewerOptions = {
+    const galleryItems: GalleryItem[] = photos.map((p) => ({
+      id: p.id,
+      panorama: p.url,
+      thumbnail: p.thumbnail,
+      name: p.title,
+      options: {
+        caption: p.title,
+      },
+    }))
+
+    const config: ViewerConfig = {
       container: containerRef.current,
-      panorama: imageUrl,
-      caption: caption ?? title,
-      description: description,
+      panorama: startPhoto.url,
+      caption: startPhoto.title,
       loadingTxt: 'Memuat panorama 360°…',
       defaultZoomLvl: 0,
       minFov: 40,
       maxFov: 90,
-      autorotateIdle: autoRotate,
+      autorotateIdle: true,
       autorotateDelay: 1500,
       autorotateSpeed: '0.5rpm',
       autorotateZoomLvl: 0,
@@ -64,15 +68,43 @@ function PanoViewerImpl({
       moveInertia: true,
       mousemove: true,
       mousewheel: true,
-      navbar: navBtns,
+      navbar: [
+        'zoom',
+        'move',
+        'caption',
+        'download',
+        'fullscreen',
+        'autorotate',
+        'gallery',
+      ],
       canvasBackground: '#000000',
+      plugins: [
+        [
+          GalleryPlugin,
+          {
+            visibleOnLoad: true,
+            thumbnailSize: { width: 140, height: 80 },
+            items: galleryItems,
+          },
+        ],
+      ],
     }
 
     try {
       const viewer = new Viewer(config)
       viewerRef.current = viewer
 
-      viewer.on('load-error', () => {
+      // Notifikasi parent saat user pilih thumbnail lain
+      viewer.addEventListener(
+        'gallery:updated',
+        (e: { item: { id: string | number } }) => {
+          if (cancelled) return
+          const idx = photos.findIndex((p) => p.id === String(e.item.id))
+          if (idx >= 0) onIndexChange?.(idx)
+        }
+      )
+
+      viewer.addEventListener('load-error', () => {
         if (cancelled) return
         setError('Gagal memuat foto panorama. Periksa URL/format gambar.')
       })
@@ -92,14 +124,22 @@ function PanoViewerImpl({
         viewerRef.current = null
       }
     }
-  }, [imageUrl, title, caption, description, autoRotate])
+  }, [photos, defaultIndex, onIndexChange])
+
+  // Set index awal ketika photos pertama kali dimuat
+  useEffect(() => {
+    if (defaultIndex >= 0 && defaultIndex < photos.length) {
+      onIndexChange?.(defaultIndex)
+    }
+    // run once on mount
+  }, [])
 
   return (
     <div className="relative h-[100svh] w-full overflow-hidden bg-black">
       <div
         ref={containerRef}
         className="h-full w-full"
-        aria-label={`Panorama 360°: ${title ?? 'progres rumah yayu'}`}
+        aria-label="Panorama 360° Progres Rumah Yayu"
         role="img"
       />
 
@@ -114,6 +154,11 @@ function PanoViewerImpl({
 }
 
 export default function PanoViewer(props: PanoViewerProps) {
-  // Remount tiap kali panorama berubah
-  return <PanoViewerImpl key={props.imageUrl} {...props} />
+  // Remount tiap kali array photos berubah
+  return (
+    <PanoViewerImpl
+      key={props.photos.map((p) => p.id).join('|')}
+      {...props}
+    />
+  )
 }
