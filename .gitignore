@@ -1,28 +1,25 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
 # dependencies
-node_modules
-/.pnp
-.pnp.*
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/versions
+node_modules/
+.pnp
+.pnp.js
+.yarn/install-state.gz
 
 # testing
-/coverage
+coverage/
 
 # next.js
-/.next/
-/out/
+.next/
+out/
+build/
+dist/
 
 # production
-/build
+.vercel
 
 # misc
 .DS_Store
 *.pem
+Thumbs.db
 
 # debug
 npm-debug.log*
@@ -30,25 +27,41 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
-.env*
-
-# vercel
-.vercel
-
+# local env files
+.env
+.env*.local
+.env.development
+.env.production
 
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-local-*
-.claude
-.z-ai-config
+
+# database (prisma sqlite)
+*.db
+*.db-journal
+db/
+
+# logs
 *.log
 dev.log
-dev.out.log
-test
-prompt
-
 server.log
-# Skills directory
-/skills/
+
+# zscripts / vercel internal
+.zscripts/
+
+# uploaded user files (jangan disimpan di repo)
+upload/
+public/uploads/progress/pano-*.jpg
+
+# agent browser
+deploy-verify.png
+
+# ide
+.vscode/
+.idea/
+*.swp
+
+# skill system internal
+skills/
+agent-ctx/
