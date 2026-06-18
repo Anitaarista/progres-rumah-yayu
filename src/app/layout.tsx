@@ -1,31 +1,38 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
-import { Toaster } from "@/components/ui/toaster";
-import { ThemeProvider } from "@/components/theme-provider";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
-  title: "Progres Rumah Yayu — Dokumentasi 360°",
+  title: "Progres Rumah Yayu — 360°",
   description:
-    "Pantau perkembangan pembangunan rumah Yayu lewat foto 360 derajat interaktif. Setiap tahap dari pondasi hingga finishing terekam dalam panorama yang bisa diputar bebas.",
+    "Foto panorama 360° dokumentasi progres rumah Yayu. Putar dan jelajahi setiap sudut.",
   keywords: [
-    "progres rumah",
+    "progres rumah yayu",
     "foto 360",
     "panorama",
     "dokumentasi pembangunan",
     "virtual tour",
   ],
   authors: [{ name: "Yayu" }],
+  openGraph: {
+    title: "Progres Rumah Yayu — 360°",
+    description:
+      "Foto panorama 360° dokumentasi progres rumah Yayu. Putar dan jelajahi setiap sudut.",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Progres Rumah Yayu — 360°",
+    description:
+      "Foto panorama 360° dokumentasi progres rumah Yayu. Putar dan jelajahi setiap sudut.",
+  },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  themeColor: "#000000",
 };
 
 export default function RootLayout({
@@ -35,18 +42,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="id" suppressHydrationWarning>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground`}
-      >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="light"
-          enableSystem
-          disableTransitionOnChange
-        >
-          {children}
-          <Toaster />
-        </ThemeProvider>
+      <body className="antialiased bg-black text-white overflow-hidden">
+        {children}
       </body>
     </html>
   );

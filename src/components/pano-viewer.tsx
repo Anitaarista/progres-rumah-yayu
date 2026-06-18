@@ -23,9 +23,6 @@ function PanoViewerImpl({
 }: PanoViewerProps) {
   const containerRef = useRef<HTMLDivElement | null>(null)
   const viewerRef = useRef<Viewer | null>(null)
-  // loading dimulai `true` — saat imageUrl berubah, komponen di-remount
-  // lewat key, jadi state loading sudah benar dari awal tanpa setState di effect.
-  const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
@@ -60,7 +57,7 @@ function PanoViewerImpl({
       minFov: 40,
       maxFov: 90,
       autorotateIdle: autoRotate,
-      autorotateDelay: 2000,
+      autorotateDelay: 1500,
       autorotateSpeed: '0.5rpm',
       autorotateZoomLvl: 0,
       moveSpeed: 1.2,
@@ -68,32 +65,20 @@ function PanoViewerImpl({
       mousemove: true,
       mousewheel: true,
       navbar: navBtns,
-      canvasBackground: 'oklch(0.97 0 0)',
+      canvasBackground: '#000000',
     }
 
     try {
       const viewer = new Viewer(config)
       viewerRef.current = viewer
 
-      viewer.once('ready', () => {
-        if (cancelled) return
-        setLoading(false)
-      })
-
-      viewer.once('panorama-loaded', () => {
-        if (cancelled) return
-        setLoading(false)
-      })
-
       viewer.on('load-error', () => {
         if (cancelled) return
         setError('Gagal memuat foto panorama. Periksa URL/format gambar.')
-        setLoading(false)
       })
     } catch (e) {
       console.error('PanoViewer init error', e)
       setError('Gagal menginisialisasi viewer.')
-      setLoading(false)
     }
 
     return () => {
@@ -110,39 +95,25 @@ function PanoViewerImpl({
   }, [imageUrl, title, caption, description, autoRotate])
 
   return (
-    <div className="relative w-full overflow-hidden rounded-2xl bg-muted ring-1 ring-border">
+    <div className="relative h-[100svh] w-full overflow-hidden bg-black">
       <div
         ref={containerRef}
-        className="w-full"
-        style={{ height: 'min(72vh, 640px)', minHeight: 380 }}
-        aria-label={`Panorama 360°: ${title ?? 'progres rumah'}`}
+        className="h-full w-full"
+        aria-label={`Panorama 360°: ${title ?? 'progres rumah yayu'}`}
         role="img"
       />
 
-      {loading && !error && (
-        <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-background/70 backdrop-blur-sm">
-          <div className="h-10 w-10 animate-spin rounded-full border-2 border-primary border-t-transparent" />
-          <p className="text-sm text-muted-foreground">
-            Memuat panorama 360°…
-          </p>
-        </div>
-      )}
-
       {error && (
-        <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-background/80 p-6 text-center backdrop-blur-sm">
+        <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-black/90 p-6 text-center">
           <div className="text-3xl">⚠️</div>
-          <p className="max-w-sm text-sm text-destructive">{error}</p>
+          <p className="max-w-sm text-sm text-red-300">{error}</p>
         </div>
       )}
-
-      <div className="pointer-events-none absolute right-3 top-3 rounded-full bg-background/80 px-3 py-1 text-xs font-medium text-foreground ring-1 ring-border backdrop-blur">
-        360° Panorama
-      </div>
     </div>
   )
 }
 
 export default function PanoViewer(props: PanoViewerProps) {
-  // Remount tiap kali panorama berubah → loading otomatis true tanpa setState di effect
+  // Remount tiap kali panorama berubah
   return <PanoViewerImpl key={props.imageUrl} {...props} />
 }
