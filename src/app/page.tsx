@@ -13,7 +13,11 @@ const PanoViewer = dynamic(() => import('@/components/pano-viewer'), {
   ),
 })
 
-const PANORAMA_URL = '/uploads/progress/pano-yayu-day1.jpg'
+// Foto 360° Yayu diserve dari ImageKit CDN.
+// Transformasi: w-4096 (rasio 2:1 → 2048 tinggi), q-80, f-auto (AVIF/WebP otomatis).
+// Ukuran turun dari 11 MB → ±2 MB tanpa kehilangan detail yang terlihat.
+const PANORAMA_URL =
+  'https://ik.imagekit.io/6m8emwpnx/tr:w-4096,q-80,f-auto/PXL_20260618_115212877.PHOTOSPHERE.jpg'
 
 export default function Home() {
   return (
