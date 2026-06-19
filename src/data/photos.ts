@@ -24,24 +24,28 @@ const ikBase = 'https://ik.imagekit.io/6m8emwpnx'
 const ik = (path: string, transform: string) =>
   `${ikBase}/tr:${transform}/${path}`
 
-const PHOTO_FILE = 'PXL_20260618_115212877.PHOTOSPHERE.jpg'
-
 export const PHOTOS: PanoPhoto[] = [
   {
     id: 'day-1',
     date: '2026-06-18',
-    url: ik(PHOTO_FILE, 'w-4096,q-80,f-auto'),
-    thumbnail: ik(PHOTO_FILE, 'w-400,h-200,fo-auto,q-70,f-auto'),
+    url: ik('PXL_20260618_115212877.PHOTOSPHERE.jpg', 'w-4096,q-80,f-auto'),
+    thumbnail: ik(
+      'PXL_20260618_115212877.PHOTOSPHERE.jpg',
+      'w-400,h-200,fo-auto,q-70,f-auto'
+    ),
+  },
+  {
+    id: 'day-2',
+    date: '2026-06-19',
+    url: ik('PXL_20260619_104535974.PHOTOSPHERE.jpg', 'w-4096,q-80,f-auto'),
+    thumbnail: ik(
+      'PXL_20260619_104535974.PHOTOSPHERE.jpg',
+      'w-400,h-200,fo-auto,q-70,f-auto'
+    ),
   },
   // ─── CONTOH ENTRI BERIKUTNYA ─────────────────────────────────────────
-  // Tinggal copy-paste blok di bawah, ganti `path`-nya ke file ImageKit baru.
+  // Tinggal copy-paste blok di bawah, ganti path file + tanggal.
   //
-  // {
-  //   id: 'day-2',
-  //   date: '2026-11-11',
-  //   url: ik('NAMA_FILE_BARU.jpg', 'w-4096,q-80,f-auto'),
-  //   thumbnail: ik('NAMA_FILE_BARU.jpg', 'w-400,h-200,fo-auto,q-70,f-auto'),
-  // },
   // {
   //   id: 'day-3',
   //   date: '2026-11-12',

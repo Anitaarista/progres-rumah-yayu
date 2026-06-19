@@ -95,15 +95,14 @@ function PanoViewerImpl({
       const viewer = new Viewer(config)
       viewerRef.current = viewer
 
-      // Notifikasi parent saat user pilih thumbnail lain
-      viewer.addEventListener(
-        'gallery:updated',
-        (e: { item: { id: string | number } }) => {
-          if (cancelled) return
-          const idx = photos.findIndex((p) => p.id === String(e.item.id))
-          if (idx >= 0) onIndexChange?.(idx)
-        }
-      )
+      // Saat panorama baru dimuat (karena user klik thumbnail gallery),
+      // sinkronkan index di parent supaya header tanggal ikut update.
+      viewer.addEventListener('panorama-load', (e: { panorama: unknown }) => {
+        if (cancelled) return
+        const url = String(e.panorama ?? '')
+        const idx = photos.findIndex((p) => p.url === url)
+        if (idx >= 0) onIndexChange?.(idx)
+      })
 
       viewer.addEventListener('load-error', () => {
         if (cancelled) return
