@@ -43,6 +43,15 @@ export const PHOTOS: PanoPhoto[] = [
       'w-400,h-200,fo-auto,q-70,f-auto'
     ),
   },
+  {
+    id: 'day-3',
+    date: '2026-06-21',
+    url: ik('PXL_20260621_134530078.PHOTOSPHERE.jpg', 'w-4096,q-80,f-auto'),
+    thumbnail: ik(
+      'PXL_20260621_134530078.PHOTOSPHERE.jpg',
+      'w-400,h-200,fo-auto,q-70,f-auto'
+    ),
+  },
   // ─── CONTOH ENTRI BERIKUTNYA ─────────────────────────────────────────
   // Tinggal copy-paste blok di bawah, ganti path file + tanggal.
   //
