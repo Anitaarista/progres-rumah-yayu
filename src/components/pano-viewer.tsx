@@ -5,6 +5,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { Viewer, type ViewerConfig } from '@photo-sphere-viewer/core'
 import { GalleryPlugin, type GalleryItem } from '@photo-sphere-viewer/gallery-plugin'
+import { AutorotatePlugin } from '@photo-sphere-viewer/autorotate-plugin'
 import '@photo-sphere-viewer/core/index.css'
 import '@photo-sphere-viewer/gallery-plugin/index.css'
 import type { PanoPhoto } from '@/data/photos'
@@ -46,10 +47,8 @@ function PanoViewerImpl({
       id: p.id,
       panorama: p.url,
       thumbnail: p.thumbnail,
-      // name dikosongkan agar tidak ada caption di thumbnail
       name: '',
       options: {
-        // caption viewer juga dikosongkan
         caption: '',
       },
     }))
@@ -61,25 +60,29 @@ function PanoViewerImpl({
       defaultZoomLvl: 0,
       minFov: 40,
       maxFov: 90,
-      autorotateIdle: true,
-      autorotateDelay: 1500,
-      autorotateSpeed: '0.5rpm',
-      autorotateZoomLvl: 0,
       moveSpeed: 1.2,
       moveInertia: true,
       mousemove: true,
       mousewheel: true,
-      // Navbar tanpa 'caption' karena tidak ada judul yang ditampilkan
       navbar: [
         'zoom',
         'move',
         'download',
         'fullscreen',
+        // tombol 'autorotate' didaftarkan oleh AutorotatePlugin
         'autorotate',
         'gallery',
       ],
       canvasBackground: '#000000',
       plugins: [
+        [
+          AutorotatePlugin,
+          {
+            autostartDelay: 1500,
+            autorotateSpeed: '0.5rpm',
+            autorotateZoomLvl: 0,
+          },
+        ],
         [
           GalleryPlugin,
           {

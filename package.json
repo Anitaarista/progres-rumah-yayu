@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "next dev -p 3000 2>&1 | tee dev.log",
-    "build": "next build",
+    "postinstall": "node scripts/postinstall.js",
+    "prebuild": "node scripts/postinstall.js",
+    "build": "next build --webpack",
     "start": "next start",
     "lint": "eslint ."
   },
@@ -14,6 +16,7 @@
     "@dnd-kit/utilities": "^3.2.2",
     "@hookform/resolvers": "^5.1.1",
     "@mdxeditor/editor": "^3.39.1",
+    "@photo-sphere-viewer/autorotate-plugin": "^5.14.1",
     "@photo-sphere-viewer/core": "^5.14.1",
     "@photo-sphere-viewer/gallery-plugin": "^5.14.1",
     "@prisma/client": "^6.11.1",
@@ -72,7 +75,7 @@
     "sonner": "^2.0.6",
     "tailwind-merge": "^3.3.1",
     "tailwindcss-animate": "^1.0.7",
-    "three": "^0.184.0",
+    "three": "0.179.1",
     "uuid": "^11.1.0",
     "vaul": "^1.1.2",
     "z-ai-web-dev-sdk": "^0.0.17",
