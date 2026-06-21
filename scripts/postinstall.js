@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+/* eslint-disable @typescript-eslint/no-require-imports */
 /**
  * Postinstall script: patch @photo-sphere-viewer/core untuk menggunakan
  * `three` sebagai peerDependency (bukan regular dependency), supaya

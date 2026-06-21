@@ -105,6 +105,20 @@ function PanoViewerImpl({
         const url = String(e.panorama ?? '')
         const idx = photos.findIndex((p) => p.url === url)
         if (idx >= 0) onIndexChange?.(idx)
+
+        // WORKAROUND bug PSV v5: canvas tidak otomatis re-render saat
+        // gallery switch panorama. Dispatch resize event supaya viewer
+        // memanggil autoSize() dan me-render ulang texture di canvas.
+        // Tanpa ini, foto ke-2/ke-3 tetap hitam meski sudah loaded.
+        setTimeout(() => {
+          if (cancelled) return
+          try {
+            viewer.autoSize()
+          } catch {
+            /* ignore */
+          }
+          window.dispatchEvent(new Event('resize'))
+        }, 100)
       })
 
       viewer.addEventListener('load-error', () => {
